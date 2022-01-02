@@ -1,7 +1,14 @@
+let rem_licht: neopixel.Strip = null
 let remsnelheid = 0
 let rijsnelheid = 0
-let rem_licht: neopixel.Strip = null
 let Afstand_tot_muur = 0
+function achteruitrijden () {
+    rem_licht.showColor(neopixel.colors(NeoPixelColors.White))
+    maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CCW, 20)
+    basic.pause(3000)
+    maqueen.motorStop(maqueen.Motors.All)
+    rem_licht.showColor(neopixel.colors(NeoPixelColors.Black))
+}
 function vertragen () {
     remsnelheid = rijsnelheid
     rem_licht.showColor(neopixel.colors(NeoPixelColors.Red))
@@ -21,9 +28,7 @@ basic.forever(function () {
     maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CW, rijsnelheid)
     if (maqueen.Ultrasonic(PingUnit.Centimeters) < Afstand_tot_muur) {
         vertragen()
-        maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CCW, rijsnelheid)
-        basic.pause(500)
-        maqueen.motorStop(maqueen.Motors.All)
+        achteruitrijden()
         music.playMelody("G B A G C5 B A B ", 311)
         for (let index = 0; index < 3; index++) {
             maqueen.writeLED(maqueen.LED.LEDLeft, maqueen.LEDswitch.turnOn)
